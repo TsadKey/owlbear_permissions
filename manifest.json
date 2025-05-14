@@ -1,0 +1,6 @@
+{
+  "id": "owlbear-permissions",
+  "name": "Token Move Only",
+  "description": "Extension to allow only token movement in Owlbear Rodeo",
+  "script": "index.html"
+}
