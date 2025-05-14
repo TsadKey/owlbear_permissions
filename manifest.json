@@ -5,8 +5,8 @@
   "action": {
     "title": "Token Move Only",
     "icon": "/icon.svg",
-    "popover": "/",
-    "height": 600,
-    "width": 400
+    "popover": "/index.html",
+    "height": 200,
+    "width": 300
   }
 }
