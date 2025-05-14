@@ -6,7 +6,12 @@
   <script type="module" src="script.js"></script>
 </head>
 <body>
-  <h2>Token Move Only</h2>
-  <p>Seul le déplacement des tokens est autorisé.</p>
+  <h3>Restrictions de tokens</h3>
+  <form>
+    <label><input type="radio" name="restriction" value="none" /> Aucune</label><br>
+    <label><input type="radio" name="restriction" value="players" /> Joueurs uniquement</label><br>
+    <label><input type="radio" name="restriction" value="gm" /> MJ uniquement</label><br>
+    <label><input type="radio" name="restriction" value="all" /> Tout le monde</label>
+  </form>
 </body>
 </html>
