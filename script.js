@@ -6,50 +6,54 @@ window.addEventListener("load", async () => {
 
   const select = document.getElementById("restriction-select");
 
-  // Fonction d'application de la restriction en fonction du mode choisi
+  // Fonction d'application de la restriction
   function applyRestriction(mode) {
     if (!scene) return;
 
-    // Déterminer si la restriction doit s'appliquer pour cet utilisateur
     const shouldRestrict =
       (mode === "everyone") ||
       (mode === "gm-only" && !isGM) ||
-      (mode === "players-only" && isGM);
+      (mode === "players-only" && !isGM);
 
     if (shouldRestrict) {
+      console.log("➞️ Restriction active (mode:", mode, ")");
       scene.interactions.setInteractionFilter((item, action) => {
-        if (item.layer !== "character") return true; // ne touche que les tokens
+        if (item.layer !== "character") return true;
         return action === "move";
       });
-      console.log("Restriction active :", mode);
     } else {
+      console.log("✅ Pas de restriction (mode:", mode, ")");
       scene.interactions.setInteractionFilter(null);
-      console.log("Aucune restriction appliquée :", mode);
     }
   }
 
-  // Fonction pour synchroniser le choix du MJ via metadata
+  // Fonction de synchronisation depuis les métadonnées
   async function syncFromMetadata() {
     const metadata = await scene.metadata.get("token-move-settings");
     const mode = metadata?.mode || "players-only";
     applyRestriction(mode);
-    if (isGM) select.value = mode;
+    if (isGM && select) {
+      select.value = mode;
+    }
   }
 
   // Initialisation
-  if (isGM) {
+  if (isGM && select) {
     select.disabled = false;
     select.addEventListener("change", async () => {
       const value = select.value;
+      console.log("📝 MJ a sélectionné :", value);
       await scene.metadata.set("token-move-settings", { mode: value });
       applyRestriction(value);
     });
   }
 
-  // Écoute les changements de metadata pour tout le monde
+  // Écoute des mises à jour de metadata
   scene.metadata.listen("token-move-settings", (value) => {
-    applyRestriction(value?.mode || "players-only");
-    if (isGM) select.value = value?.mode || "players-only";
+    const mode = value?.mode || "players-only";
+    console.log("🔄 Metadata mise à jour :", mode);
+    applyRestriction(mode);
+    if (isGM && select) select.value = mode;
   });
 
   syncFromMetadata();
