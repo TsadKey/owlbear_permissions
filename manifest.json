@@ -4,7 +4,7 @@
   "manifest_version": 1,
   "action": {
     "title": "Token Move Only",
-    "icon": "/icon.svg",
+    "icon": "icon.svg",
     "popover": "/index.html",
     "height": 200,
     "width": 300
