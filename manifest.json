@@ -4,8 +4,8 @@
   "manifest_version": 1,
   "action": {
     "title": "Token Move Only",
-    "icon": "icon.svg",
-    "popover": "/index.html",
+    "icon": "/owlbear_permissions/icon.svg",
+    "popover": "/owlbear_permissions/index.html",
     "height": 200,
     "width": 300
   }
