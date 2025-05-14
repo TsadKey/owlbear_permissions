@@ -1,4 +1,4 @@
-import { getScene, getIsGM } from "https://cdn.owlbear.rodeo/v2/index.js";
+import { getScene, getIsGM } from "https://cdn.owlbear.rodeo/v1/index.js";
 
 window.addEventListener("load", async () => {
   const scene = await getScene();
@@ -17,19 +17,19 @@ window.addEventListener("load", async () => {
 
     if (shouldRestrict) {
       console.log("➞️ Restriction active (mode:", mode, ")");
-      scene.interactions.setInteractionFilter((item, action) => {
+      scene.setInteractionFilter((item, action) => {
         if (item.layer !== "character") return true;
         return action === "move";
       });
     } else {
       console.log("✅ Pas de restriction (mode:", mode, ")");
-      scene.interactions.setInteractionFilter(null);
+      scene.setInteractionFilter(null);
     }
   }
 
   // Fonction de synchronisation depuis les métadonnées
   async function syncFromMetadata() {
-    const metadata = await scene.metadata.get("token-move-settings");
+    const metadata = await scene.getMetadata("token-move-settings");
     const mode = metadata?.mode || "players-only";
     applyRestriction(mode);
     if (isGM && select) {
@@ -43,17 +43,19 @@ window.addEventListener("load", async () => {
     select.addEventListener("change", async () => {
       const value = select.value;
       console.log("📝 MJ a sélectionné :", value);
-      await scene.metadata.set("token-move-settings", { mode: value });
+      await scene.setMetadata("token-move-settings", { mode: value });
       applyRestriction(value);
     });
   }
 
   // Écoute des mises à jour de metadata
-  scene.metadata.listen("token-move-settings", (value) => {
-    const mode = value?.mode || "players-only";
-    console.log("🔄 Metadata mise à jour :", mode);
-    applyRestriction(mode);
-    if (isGM && select) select.value = mode;
+  scene.onMetadataUpdate((key, value) => {
+    if (key === "token-move-settings") {
+      const mode = value?.mode || "players-only";
+      console.log("🔄 Metadata mise à jour :", mode);
+      applyRestriction(mode);
+      if (isGM && select) select.value = mode;
+    }
   });
 
   syncFromMetadata();
