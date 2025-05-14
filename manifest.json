@@ -1,6 +1,6 @@
 {
   "name": "Token Move Only",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "manifest_version": 1,
   "action": {
     "title": "Token Move Only",
