@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Token Move Only</title>
+    <script type="module">
+      import { getScene, getMetadata, onMetadataUpdate } from "https://cdn.owlbear.rodeo/v1/index.js";
+
+      // Quand l’extension est chargée
+      window.addEventListener("load", async () => {
+        const scene = await getScene();
+
+        // Exemple : filtrer les actions utilisateur sur les tokens
+        scene.interactions.setInteractionFilter((token, action) => {
+          if (action === "move") return true;
+          return false; // Bloque toute autre action (rotate, resize, delete)
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Extension Token Move Only</h1>
+    <p>Seul le déplacement de tokens est autorisé.</p>
+  </body>
+</html>
